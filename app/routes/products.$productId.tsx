@@ -1,0 +1,54 @@
+import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  const products = await fetch(
+    `https://fakestoreapi.com/products/${params.productId}`
+  ).then((res) => res.json());
+  return json(products);
+};
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [
+    { title: `${data.title}` },
+    { name: "description", content: data.description },
+  ];
+};
+
+export default function Product() {
+  const product = useLoaderData<typeof loader>();
+
+  return (
+    <>
+      <div>
+        <div className="container px-5 py-24 mx-auto">
+          <div className="lg:w-4/5 mx-auto flex flex-wrap">
+            <img
+              alt="ecommerce"
+              className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
+              src={product.image}
+            />
+            <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
+              <h2 className="text-sm title-font text-gray-500 tracking-widest">{product.category}</h2>
+              <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
+                {product.title}
+              </h1>
+              <p className="leading-relaxed border border-b-slate-400 pb-5 mb-10">
+                {product.description}
+              </p>
+              
+              <div className="flex">
+                <span className="title-font font-medium text-2xl text-gray-900">
+                  ${product.price}
+                </span>
+                <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                  Adicionar ao carrinho
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
