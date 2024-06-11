@@ -48,7 +48,7 @@ export default function Product() {
                 {product.description}
               </p>
 
-              <div className="flex">
+              <div className="flex justify-between items-center w-full">
                 <span className="title-font font-medium text-2xl text-gray-900">
                   ${product.price}
                 </span>
